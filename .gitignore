@@ -1,0 +1,42 @@
+# Dependencias y archivos generados
+node_modules/
+.expo/
+dist/
+web-build/
+build/
+.gradle/
+.kotlin/
+.cxx/
+
+# Variables locales y credenciales
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p8
+*.p12
+*.jks
+*.mobileprovision
+
+# Registros, temporales y archivos del sistema
+*.log
+*.log.*
+_tmp_*
+.tmp-*/
+.DS_Store
+Thumbs.db
+
+# Datos generados en tiempo de ejecucion
+uploads/
+print-jobs/
+
+# Herramientas y editores
+.idea/
+.vscode/
+*.iml
+*.tsbuildinfo
+
+# Historiales Git anteriores conservados solo como respaldo local
+.git-history-backups/
