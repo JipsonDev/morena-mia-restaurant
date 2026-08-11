@@ -7,6 +7,8 @@ Aplicacion web para centralizar la operacion diaria de un restaurante: mesas, pe
 **[Abrir demo de Morena Mia](https://restaurante-frontend-two.vercel.app/)**
 
 > La demo usa datos de prueba. No ingreses informacion real de clientes, pagos o negocio.
+>
+> **Nota:** la primera carga puede tardar unos minutos porque el backend esta alojado en un plan gratuito y puede entrar en modo de suspension cuando no recibe actividad.
 
 ## Credenciales de demostracion
 
