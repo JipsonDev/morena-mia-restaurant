@@ -7,6 +7,8 @@ dist/
 web-build/
 .expo/
 .tmp-*/
+graphify-out/
+print-jobs/
 
 uploads/
 *.log
