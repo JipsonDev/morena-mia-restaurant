@@ -20,7 +20,9 @@ import extrasRoutes from './routes/extras.js';
 import notificacionesRoutes from './routes/notificaciones.js';
 import auditoriaRoutes from './routes/auditoria.js';
 import configuracionRoutes from './routes/configuracion.js';
+import revisionDatosRoutes from './routes/revisionDatos.js';
 import impresionesRoutes from './routes/impresiones.js';
+import publicoRoutes from './routes/publico.js';
 import reservasRoutes, { ensureReservationsTable } from './routes/reservas.js';
 import { ensurePrintQueue } from './services/printQueue.js';
 import { verifyToken, JWT_SECRET } from './middleware/auth.js';
@@ -28,6 +30,7 @@ import { attachSocketAuth } from './services/socketAuth.js';
 import { resolveCorsOrigins, securityHeaders, trustProxySetting } from './services/httpSecurity.js';
 import { setRealtimeServer } from './realtime.js';
 import { ensureAuditTable } from './services/audit.js';
+import { unifyCollation } from './services/collation.js';
 import { ensureBusinessConfigTable } from './services/businessConfig.js';
 
 dotenv.config();
@@ -81,10 +84,18 @@ app.use('/api/extras', verifyToken, extrasRoutes);
 app.use('/api/notificaciones', verifyToken, notificacionesRoutes);
 app.use('/api/auditoria', verifyToken, auditoriaRoutes);
 app.use('/api/configuracion', verifyToken, configuracionRoutes);
+app.use('/api/revision-datos', verifyToken, revisionDatosRoutes);
 app.use('/api/reservas', verifyToken, reservasRoutes);
 app.use('/api/impresiones', impresionesRoutes);
+app.use('/api/publico', publicoRoutes); // menú del QR: sin sesión, solo lectura
 
 const PORT = process.env.PORT || 3000;
+// Una sola intercalación en toda la base (evita «Illegal mix of collations»). No detiene el arranque.
+try {
+  await unifyCollation();
+} catch (error) {
+  console.warn('No se pudo revisar la intercalación de la base:', error.message);
+}
 try {
   await ensureAuditTable();
   await ensureBusinessConfigTable();

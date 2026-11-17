@@ -184,6 +184,48 @@ export function AdminAppearance({ children }) {
   return <ThemeContext.Provider value={{ ...theme, c }}>{children}</ThemeContext.Provider>;
 }
 
+// App del mesero — dirección «Suave»: fondo blanco, tarjetas redondeadas con sombras suaves,
+// el rojo de la marca (más vivo) para la acción principal y lo que hay que cobrar.
+// Los estados de mesa usan color + punto + texto (nunca solo color).
+export const comandaPalette = {
+  light: {
+    bg: '#FFFFFF', surface: '#FFFFFF', surfaceAlt: '#F4F5F7', soft: '#EEF0F3', softer: '#E4E7EC',
+    line: '#ECEEF2', lineStrong: '#D5D9E0', text: '#14161A', muted: '#5F6672', faint: '#8A919C',
+    primary: '#D63B20', primaryHover: '#C2341B', primaryPressed: '#A92C16', primarySoft: '#FDECE8', primaryText: '#B8321A', onPrimary: '#FFFFFF',
+    ink: '#14161A', onInk: '#FFFFFF',
+    green: '#0F7B3E', greenDot: '#12A150', greenSoft: '#E7F6EC', amber: '#A15C00', amberSoft: '#FFF3DC', red: '#C8341B', redSoft: '#FDECE8',
+    sky: '#2563C9', skySoft: '#E8F0FD', purple: '#6D4AD1', purpleSoft: '#F0EBFD', pink: '#B33A73', pinkSoft: '#FCEAF2',
+    focus: 'rgba(214,59,32,0.35)', overlay: 'rgba(15,17,21,0.42)', shadow: 'rgba(16,24,40,0.08)', glass: 'rgba(255,255,255,0.82)',
+  },
+  dark: {
+    // Grafito frío: sin tintes rojos/naranjas translúcidos sobre el fondo (se veían «café»).
+    bg: '#0E0F12', surface: '#191A1F', surfaceAlt: '#22242A', soft: '#2A2C33', softer: '#34373F',
+    line: '#2A2C33', lineStrong: '#3B3E47', text: '#F3F4F6', muted: '#A3A9B4', faint: '#7D838F',
+    primary: '#D63B20', primaryHover: '#E2492D', primaryPressed: '#BF3219', primarySoft: '#2A2C33', primaryText: '#FF6B52', onPrimary: '#FFFFFF',
+    ink: '#F3F4F6', onInk: '#14161A',
+    green: '#5FD69A', greenDot: '#3CCB7F', greenSoft: '#1C2A24', amber: '#F5C451', amberSoft: '#2A2720', red: '#FF6B6B', redSoft: '#2C1E23',
+    sky: '#8DB7F5', skySoft: '#1D2533', purple: '#B9A5FA', purpleSoft: '#252238', pink: '#F38BB7', pinkSoft: '#2C1F29',
+    focus: 'rgba(214,59,32,0.5)', overlay: 'rgba(0,0,0,0.62)', shadow: 'rgba(0,0,0,0.5)', glass: 'rgba(25,26,31,0.82)',
+  },
+};
+
+export function WaiterAppearance({ children }) {
+  const theme = useTheme();
+  const c = { ...theme.c, ...comandaPalette[theme.isDark ? 'dark' : 'light'], comanda: true, admin: false, isDark: theme.isDark };
+  return <ThemeContext.Provider value={{ ...theme, c }}>{children}</ThemeContext.Provider>;
+}
+
+// Estado de mesa: etiqueta, punto de color y tinte de la tarjeta.
+export function comandaTableMeta(state, c) {
+  const map = {
+    Libre: { label: 'Libre', shape: 'free', bg: c.surface, border: c.line, text: c.green, dot: c.greenDot, tint: c.greenSoft, number: c.text },
+    Ocupada: { label: 'Ocupada', shape: 'busy', bg: c.surface, border: c.line, text: c.sky, dot: c.sky, tint: c.skySoft, number: c.text },
+    Cuenta: { label: 'Por cobrar', shape: 'filled', bg: c.primary, border: c.primary, text: c.onPrimary, dot: c.onPrimary, tint: c.primarySoft, number: c.onPrimary },
+    Reservada: { label: 'Reservada', shape: 'reserved', bg: c.surface, border: c.line, text: c.purple, dot: c.purple, tint: c.purpleSoft, number: c.text },
+  };
+  return map[state] || map.Libre;
+}
+
 export const softShadow = (c, level = 1) => {
   if (c.admin) return Platform.OS === 'web' ? { boxShadow: c.isDark ? 'none' : `0 ${level}px ${3 * level}px ${c.shadow}` } : { elevation: 0 };
   if (Platform.OS === 'web') {
